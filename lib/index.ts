@@ -3,8 +3,6 @@ import { isObject, isString, isEmptyString, isNoTransmission, isEmptyObject, isF
 import { ls_save, ls_get, ls_has, ls_remove } from './ls';
 import { ss_save, ss_get, ss_has, ss_remove } from './ss';
 
-const a = Object.assign({});
-console.log(a);
 class WellCache {
     private prefix: string
     private mode: string
