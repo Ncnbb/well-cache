@@ -49,6 +49,7 @@ const initWebpackConfig = async () => {
                                     'loose': true
                                 }],
                                 ['@babel/plugin-transform-runtime', {
+                                    'proposal': true,
                                     'corejs': 3,
                                     'helpers': true,
                                     'regenerator': true,
@@ -65,7 +66,7 @@ const initWebpackConfig = async () => {
         ],
         resolve: {
             alias: {
-                WellCache: require.resolve( path.resolve('./es/index.js')),
+                WellCache: require.resolve( path.resolve('./dist/index.js')),
             },
             extensions: ['.js', '.jsx', '.json'],
         },
