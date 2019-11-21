@@ -1,21 +1,13 @@
 const gulp = require( 'gulp' );
 const ts = require( 'gulp-typescript' );
-
-async function build() {
+const tsProject = ts.createProject( 'tsconfig.json', {
+    typescript: require( 'typescript' ),
+} );
+const typescript = tsProject();
+async function build () {
     gulp.src( ['./lib/**/*.ts'], { base: './lib' } )
-    .pipe( ts( {
-        "declaration": true,
-        "strictNullChecks": true, //在严格的 null检查模式下， null和 undefined值不包含在任何类型里，只允许用它们自己和 any来赋值（有个例外， undefined可以赋值到 void）
-        "moduleResolution": "classic", //决定如何处理模块。或者是 "Node"对于Node.js/io.js，或者是 "Classic"（默认）。查看 模块解析了解详情。
-        "jsx": "preserve", //在 .tsx文件里支持JSX： "React"或 "Preserve"。
-        "noUnusedParameters": true, // 若有未使用的参数则抛错。
-        "noUnusedLocals": true, // 若有未使用的局部变量则抛错。
-        "noEmitOnError": false, //报错不生成代码
-        "allowSyntheticDefaultImports": true, //允许从没有设置默认导出的模块中默认导入。这并不影响代码的显示，仅为了类型检查。
-        "target": "es2015",
-        "outDir": "./@types",
-    } ) )
-    .pipe( gulp.dest( 'dist' ) );
+        .pipe(typescript)
+        .pipe( await gulp.dest( 'dist' ) );
 }
 
 gulp.task( 'build', build );
