@@ -1,19 +1,16 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const NODE_ENV = process.env.NODE_ENV;
 
 const initWebpackConfig = async () => {
     return {
-        mode: NODE_ENV === 'development' ? 'development' : 'production',
+        mode: 'development',
         entry: {
-            wellCache: './lib/index.ts'
+            index:path.join(__dirname, './src/index.js'),
         },
         output: {
-            filename: NODE_ENV === 'development' ? '[name]-development.js' : '[name]-production.js',
-            path: path.resolve('./dist'),
-            library: 'WellCache',
-            libraryTarget: 'umd',
-            umdNamedDefine: true
+            filename: '[name].js',
+            path: path.join(__dirname, './dist'),
+            publicPath: '/'
         },
         module: {
             rules: [
@@ -60,20 +57,7 @@ const initWebpackConfig = async () => {
                             ]
                         }
                     }
-                },
-                {
-                    test: /\.ts|tsx?$/,
-                    use: [
-                        {
-                            loader: 'ts-loader',
-                            options: {
-                                // 指定特定的ts编译配置，为了区分脚本的ts配置
-                                configFile: path.resolve(__dirname, './tsconfig.json'),
-                            },
-                        }
-                    ],
-                    exclude: /node_modules/,
-                },
+                }
             ]
         },
         plugins: [
@@ -81,19 +65,13 @@ const initWebpackConfig = async () => {
         ],
         resolve: {
             alias: {
-                // react: require.resolve(REACT_PATH),
-                // 'react-dom': require.resolve(REACT_DOM_PATH),
-                // 'better-scroll': require.resolve(BSCROLL_PATH),
-                // immutable: require.resolve(IMMUTABLE_PATH),
-                // 'swiper/dist/css/swiper.css': require.resolve('swiper/dist/css/swiper.css'),
-                // swiper: require.resolve(SWIPER_PATH),
-                // 'pubsub-js': require.resolve(PUBSUB_PATH),
-                // '@': path.resolve(__dirname, './src/book/'),
-                // '^': path.resolve(__dirname, './src/otherService/'),
-                // '@@': path.resolve(__dirname, './src/'),
-                // '@rental': path.resolve(__dirname, './src/mainRental')
+                WellCache: require.resolve( path.resolve('./dist/index.js')),
             },
             extensions: ['.js', '.jsx', '.json'],
+        },
+        devServer: {
+            host: '0.0.0.0',
+            port: '4321'
         }
     };
 }

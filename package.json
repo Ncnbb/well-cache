@@ -2,10 +2,12 @@
   "name": "well-cache",
   "version": "0.0.1",
   "description": "",
-  "types": "@types/index.d.ts",
+  "types": "dist/index.d.ts",
   "main": "index.js",
   "scripts": {
-    "build": "NODE_ENV=development webpack --config webpack.config.js"
+    "build": "rm -rf ./dist && gulp build",
+    "watch": "rm -rf ./dist && gulp watch",
+    "ls": "webpack-dev-server --open --config ./examples/localStorage/webpack.config.js"
   },
   "author": "",
   "license": "ISC",
@@ -18,11 +20,14 @@
     "@babel/runtime-corejs3": "^7.7.2",
     "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
+    "gulp": "^4.0.2",
+    "gulp-typescript": "^6.0.0-alpha.1",
     "handlebars-loader": "^1.7.1",
     "ts-lint": "^4.5.1",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.2",
     "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0"
   }
 }
