@@ -5,8 +5,10 @@
   "types": "dist/index.d.ts",
   "main": "index.js",
   "scripts": {
-    "build": "rm -rf ./dist && gulp build",
-    "watch": "rm -rf ./dist && gulp watch",
+    "build": "rm -rf ./dist && ./node_modules/.bin/tsc",
+    "watch": "rm -rf ./dist && ./node_modules/.bin/tsc --watch",
+    "build2": "rm -rf ./dist && gulp build",
+    "watch2": "rm -rf ./dist && gulp watch",
     "ls": "webpack-dev-server --open --config ./examples/localStorage/webpack.config.js"
   },
   "author": "",

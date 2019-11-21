@@ -8,7 +8,8 @@
     "noUnusedLocals": true, // 若有未使用的局部变量则抛错。
     "noEmitOnError": false, //报错不生成代码
     "allowSyntheticDefaultImports": true, //允许从没有设置默认导出的模块中默认导入。这并不影响代码的显示，仅为了类型检查。
-    "target": "es2015",
+    // "target": "es5",
+    "module": "es6",
     "sourceMap": false,
     "outDir": "./dist"
   },
