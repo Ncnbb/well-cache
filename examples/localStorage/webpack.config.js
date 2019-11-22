@@ -66,7 +66,7 @@ const initWebpackConfig = async () => {
         ],
         resolve: {
             alias: {
-                WellCache: require.resolve( path.resolve('./dist/index.js')),
+                WellCache: require.resolve( path.resolve('./es/index.js')),
             },
             extensions: ['.js', '.jsx', '.json'],
         },
