@@ -1,0 +1,11 @@
+version: 2.1
+jobs: 
+  docker:
+      - image: circleci/node:latest
+    filters:
+      branches:
+        only: master
+    steps:
+      - run:
+            name: Running compile
+            command: npm run compile

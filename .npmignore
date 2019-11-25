@@ -12,3 +12,4 @@ webpack.config.js
 README.md
 lib/
 examples/
+.circleci/
