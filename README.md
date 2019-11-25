@@ -57,7 +57,7 @@ const result = await wcache.saveSync('123', {id: 123, data: '1231'});
 // }
 ```
 
-## APi get
+## API get
 
 获取对应key的数据
 
@@ -89,7 +89,7 @@ const result = await wcache.getSync('123', {id: 123});
 // }
 ```
 
-## APi has
+## API has
 
 has( key: string, conditions?: object, callback?: Function )
 
@@ -113,7 +113,7 @@ const result = await wcache.has('123', {id: 123});
 // true | false
 ```
 
-## APi remove
+## API remove
 
 remove( key: string, callback?: Function )
 
