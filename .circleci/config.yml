@@ -5,6 +5,9 @@
 version: 2
 jobs:
   build:
+    filters:
+          branches:
+            only: master
     docker:
       # specify the version you desire here
       - image: circleci/node:12.13.1
@@ -13,9 +16,7 @@ jobs:
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/mongo:3.4.4
-    filters:
-          branches:
-            only: master
+    
 
     working_directory: ~/repo
 
