@@ -1,6 +1,6 @@
 {
   "name": "well-cache",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "",
   "types": "dist/index.d.ts",
   "main": "index.js",
@@ -8,7 +8,8 @@
     "build": "rm -rf ./es && ./node_modules/.bin/tsc",
     "watch": "rm -rf ./es && ./node_modules/.bin/tsc --watch",
     "compile": "rm -rf ./dist && gulp compile",
-    "ls": "webpack-dev-server --open --config ./examples/localStorage/webpack.config.js"
+    "ex_dev": "NODE_ENV=development webpack-dev-server --open --config ./examples/cache/webpack.config.js",
+    "ex_pub": "NODE_ENV=production webpack-dev-server --open --config ./examples/cache/webpack.config.js"
   },
   "author": "",
   "license": "ISC",

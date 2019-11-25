@@ -1,4 +1,4 @@
-import { isUndefined, isNull, isObject } from 'util';
+import { isUndefined, isNull, isObject, isFunction } from 'util';
 
 function openDB(storeName: string): Promise<{IDB: IDBOpenDBRequest, DB: IDBDatabase | null}> {
     return new Promise((resolve) => {
@@ -38,203 +38,209 @@ function openDB(storeName: string): Promise<{IDB: IDBOpenDBRequest, DB: IDBDatab
     }); 
 } 
 
-export async function IDB_save(key: string, data: string | object): Promise<any> {
-    return new Promise(async (resolve) => {
+export async function IDB_save(key: string, data: string | object, callback?: Function): Promise<any> {
+    const fn = function(result) {
+        callback && isFunction(callback) && callback({
+            name: key,
+            isOk: result
+        });
+    }
 
-        const storeName = `${this.prefix}-db`;
-        if ( isUndefined(this.IDB) || isNull(this.IDB) || this.IDB.readyState != 'done' ) {
-            const result = await openDB.call(this, storeName);
-            if ( result ) {
-                const { IDB, DB } = result;
-                this.IDB = IDB;
-                this.DB = DB;
-            } else {
-                return;
-            }
+    const storeName = `${this.prefix}-db`;
+    if ( isUndefined(this.IDB) || isNull(this.IDB) || this.IDB.readyState != 'done' ) {
+        const result = await openDB.call(this, storeName);
+        if ( result ) {
+            const { IDB, DB } = result;
+            this.IDB = IDB;
+            this.DB = DB;
         }
+    }
 
-        try {
-            const transaction = this.DB.transaction( storeName, 'readwrite' );
-            const store = transaction.objectStore( storeName );
+    try {
+        const transaction = this.DB.transaction( storeName, 'readwrite' );
+        const store = transaction.objectStore( storeName );
+
+        const request = store.get( key );
+
+        request.onsuccess = function () {
+            if ( request.result ) {
+                const request = store.put( {
+                    data,
+                    type: key
+                } );
+                request.onsuccess = function () {
+                    fn(true);
+                };
     
-            const request = store.get( key );
-    
-            request.onsuccess = function () {
-                if ( request.result ) {
-                    const request = store.put( {
-                        data,
-                        type: key
-                    } );
-                    request.onsuccess = function () {
-                        resolve(true);
-                    };
-        
-                    request.onerror = function () {
-                        resolve(false);
-                    }
-                } else {
-                    const request = store.add( {
-                        data,
-                        type: key
-                    } );
-                    request.onsuccess = function () {
-                        resolve(true);
-                    };
-        
-                    request.onerror = function () {
-                        resolve(false);
-                    }
+                request.onerror = function () {
+                    fn(true);
                 }
-            };
-            request.onerror = function() {
-                this.onerror(new Error('save data to indexDB error'));
-                resolve(false);
+            } else {
+                const request = store.add( {
+                    data,
+                    type: key
+                } );
+                request.onsuccess = function () {
+                    fn(true);
+                };
+    
+                request.onerror = function () {
+                    fn(true);
+                }
             }
-        } catch ( err ) {
-            this.onerror(err);
-            resolve(false);
+        };
+        request.onerror = function() {
+            this.onerror(new Error('save data to indexDB error'));
+            fn(true);
         }
-    });
+    } catch ( err ) {
+        this.onerror(err);
+        fn(true);
+    }
 }
 
-export async function IDB_get(key: string, conditions?: object): Promise<any> {
-    return new Promise(async (resolve) => {
+export async function IDB_get(key: string, conditions?: object, callback?: Function): Promise<any> {
+    const fn = function(result) {
+        callback && isFunction(callback) && callback(result);
+    }
 
-        const storeName = `${this.prefix}-db`;
-        if ( isUndefined(this.IDB) || isNull(this.IDB) || this.IDB.readyState != 'done' ) {
-            const result = await openDB.call(this, storeName);
-            if ( result ) {
-                const { IDB, DB } = result;
-                this.IDB = IDB;
-                this.DB = DB;
-            } else {
-                return;
-            }
+    const storeName = `${this.prefix}-db`;
+    if ( isUndefined(this.IDB) || isNull(this.IDB) || this.IDB.readyState != 'done' ) {
+        const result = await openDB.call(this, storeName);
+        if ( result ) {
+            const { IDB, DB } = result;
+            this.IDB = IDB;
+            this.DB = DB;
         }
+    }
 
-        try {
-            const transaction = this.DB.transaction( storeName, 'readwrite' );
-            const store = transaction.objectStore( storeName );
-            const request = store.get( key );
-            let data: object | null = null;
-            request.onsuccess = function () {
+    try {
+        const transaction = this.DB.transaction( storeName, 'readwrite' );
+        const store = transaction.objectStore( storeName );
+        const request = store.get( key );
+        let data: object | null = null;
+        request.onsuccess = function () {
 
-                if ( request.result ) {
+            if ( request.result ) {
 
-                    data = request.result.data;
+                data = request.result.data;
 
-                    if ( data && isObject(conditions)) {
-                        if ( isObject(data) ) {
-                            for ( let key in conditions ) {
-                                if ( data && conditions[key] != (<object>data[key]) ) {
-                                    data = null;
-                                    break;
-                                }
+                if ( data && isObject(conditions)) {
+                    if ( isObject(data) ) {
+                        for ( let key in conditions ) {
+                            if ( data && conditions[key] != (<object>data[key]) ) {
+                                data = null;
+                                break;
                             }
                         }
                     }
-                    resolve({
-                        isOk: true,
-                        data: data
-                    });
-                } else {
-                    resolve({
-                        isOk: false,
-                        data: null
-                    });
                 }
-            };
-            request.onerror = function() {
-                this.onerror(new Error('save data to indexDB error'));
-                resolve({
+                fn({
+                    isOk: true,
+                    data: data
+                })
+            } else {
+                fn({
                     isOk: false,
                     data: null
-                });
+                })
             }
-        } catch ( err ) {
-            this.onerror(err);
-            resolve({
+        };
+        request.onerror = function() {
+            this.onerror(new Error('save data to indexDB error'));
+            fn({
                 isOk: false,
                 data: null
-            });
+            })
         }
-    });
+    } catch ( err ) {
+        this.onerror(err);
+        fn({
+            isOk: false,
+            data: null
+        })
+    }
 }
 
-export async function IDB_has(key: string, conditions?: object): Promise<any> {
-    return new Promise(async (resolve) => {
+export async function IDB_has(key: string, conditions?: object, callback?: Function): Promise<any> {
 
-        const storeName = `${this.prefix}-db`;
-        if ( isUndefined(this.IDB) || isNull(this.IDB) || this.IDB.readyState != 'done' ) {
-            const result = await openDB.call(this, storeName);
-            if ( result ) {
-                const { IDB, DB } = result;
-                this.IDB = IDB;
-                this.DB = DB;
-            } else {
-                return;
-            }
+    const fn = function(result) {
+        callback && isFunction(callback) && callback(result);
+    }
+
+    const storeName = `${this.prefix}-db`;
+    if ( isUndefined(this.IDB) || isNull(this.IDB) || this.IDB.readyState != 'done' ) {
+        const result = await openDB.call(this, storeName);
+        if ( result ) {
+            const { IDB, DB } = result;
+            this.IDB = IDB;
+            this.DB = DB;
+        } else {
+            return;
         }
+    }
 
-        try {
-            const transaction = this.DB.transaction( storeName, 'readwrite' );
-            const store = transaction.objectStore( storeName );
-            const request = store.get( key );
-            let haveData: boolean = true;
-            let data: object | null = null;
-            request.onsuccess = function () {
-                if ( request.result ) {
-                    data = request.result.data;
-                    if ( data && isObject(conditions)) {
-                        if ( isObject(data) ) {
-                            for ( let key in conditions ) {
-                                if ( data && conditions[key] != (<object>data[key]) ) {
-                                    data = null;
-                                    haveData = false;
-                                    break;
-                                }
+    try {
+        const transaction = this.DB.transaction( storeName, 'readwrite' );
+        const store = transaction.objectStore( storeName );
+        const request = store.get( key );
+        let haveData: boolean = true;
+        let data: object | null = null;
+        request.onsuccess = function () {
+            if ( request.result ) {
+                data = request.result.data;
+                if ( data && isObject(conditions)) {
+                    if ( isObject(data) ) {
+                        for ( let key in conditions ) {
+                            if ( data && conditions[key] != (<object>data[key]) ) {
+                                data = null;
+                                haveData = false;
+                                break;
                             }
                         }
                     }
-                    resolve(haveData);
-                } else {
-                    resolve(false);
                 }
-            };
-            request.onerror = function() {
-                this.onerror(new Error('save data to indexDB error'));
-                resolve(false);
+                fn(haveData);
+            } else {
+                fn(false);
             }
-        } catch ( err ) {
-            this.onerror(err);
-            resolve(false);
+        };
+        request.onerror = function() {
+            this.onerror(new Error('save data to indexDB error'));
+            fn(false);
         }
-    });
+    } catch ( err ) {
+        this.onerror(err);
+        fn(false);
+    }
 }
 
-export function IDB_remove(key: string) {
-    return new Promise(async (resolve) => {
-        const storeName = `${this.prefix}-db`;
-        if ( isUndefined(this.IDB) || isNull(this.IDB) || this.IDB.readyState != 'done' ) {
-            const result = await openDB.call(this, storeName);
-            if ( result ) {
-                const { IDB, DB } = result;
-                this.IDB = IDB;
-                this.DB = DB;
-            } else {
-                return;
-            }
-        }
+export async function IDB_remove(key: string, callback?: Function) {
+    const fn = function(result) {
+        callback && isFunction(callback) && callback({
+            isOk: result
+        });
+    }
 
-        try {
-            const transaction = this.DB.transaction( storeName, 'readwrite' );
-            const store = transaction.objectStore( storeName );
-            console.log(store)
-            store.delete( key );
-            resolve( true );
-        } catch ( err ) {
-            this.onerror(err);
-            resolve( false );
+    const storeName = `${this.prefix}-db`;
+    if ( isUndefined(this.IDB) || isNull(this.IDB) || this.IDB.readyState != 'done' ) {
+        const result = await openDB.call(this, storeName);
+        if ( result ) {
+            const { IDB, DB } = result;
+            this.IDB = IDB;
+            this.DB = DB;
+        } else {
+            return;
         }
-    })
+    }
+
+    try {
+        const transaction = this.DB.transaction( storeName, 'readwrite' );
+        const store = transaction.objectStore( storeName );
+        store.delete( key );
+        fn(true);
+    } catch ( err ) {
+        this.onerror(err);
+        fn(false);
+    }
 }

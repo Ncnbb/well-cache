@@ -23,12 +23,10 @@ class WellCache {
     }
 
     private onerror(err: Error): void {
-        console.log(err.name);
-        console.log(err.message);
-        console.log(err.stack);
+        console.error(err.stack);
     }
 
-    public async save(key: string, data: string | object, callback?: Function): Promise<any> {
+    public save(key: string, data: string | object, callback?: Function): void {
         if (isNoTransmission(key) || !isString(key)) {
             this.onerror(new Error('key must be string, this current key is null'));
             return;
@@ -48,18 +46,20 @@ class WellCache {
         const saveKey = `${this.prefix}-${key}`;
         let result = null;
         switch (this.mode) {
-            case 'IDB': result = await IDB_save.call(this, saveKey, data); break;
+            case 'IDB': result = IDB_save.call(this, saveKey, data, callback); break;
             case 'ls': result = ls_save.call(this, saveKey, data); break;
             case 'ss': result = ss_save.call(this, saveKey, data); break;
         }
 
-        callback && isFunction(callback) && callback({
-            name: saveKey,
-            isOk: result
-        });
+        if ( this.mode != 'IDB' ) {
+            callback && isFunction(callback) && callback({
+                name: saveKey,
+                isOk: result
+            });
+        }
     }
 
-    public async get(key: string, conditions?: object, callback?: Function): Promise<any> {
+    public get(key: string, conditions?: object, callback?: Function): void {
         if (!isString(key)) {
             this.onerror(new Error('key must be string, this current key is null'));
             return;
@@ -75,15 +75,18 @@ class WellCache {
         const saveKey = `${this.prefix}-${key}`;
         let result = null;
         switch (this.mode) {
-            case 'IDB': result = await IDB_get.call(this, saveKey, conditions); break;
+            case 'IDB': result = IDB_get.call(this, saveKey, conditions, callback); break;
             case 'ls': result = ls_get.call(this, saveKey, conditions); break;
             case 'ss': result = ss_get.call(this, saveKey, conditions); break;
         }
 
-        callback && isFunction(callback) && callback(result);
+        if ( this.mode != 'IDB' ) {
+            callback && isFunction(callback) && callback(result);
+        }
+
     }
 
-    public async has(key: string, conditions?: object, callback?: Function): void {
+    public has(key: string, conditions?: object, callback?: Function): void {
         if (!isString(key)) {
             this.onerror(new Error('key must be string, this current key is null'));
             return;
@@ -99,15 +102,17 @@ class WellCache {
         const saveKey = `${this.prefix}-${key}`;
         let result = null;
         switch (this.mode) {
-            case 'IDB': result = await IDB_has.call(this, saveKey, conditions); break;
+            case 'IDB': result = IDB_has.call(this, saveKey, conditions, callback); break;
             case 'ls': result = ls_has.call(this, saveKey, conditions); break;
             case 'ss': result = ss_has.call(this, saveKey, conditions); break;
         }
 
-        callback && isFunction(callback) && callback(result);
+        if ( this.mode != 'IDB' ) {
+            callback && isFunction(callback) && callback(result);
+        }
     }
 
-    public async remove(key: string, callback?: Function) {
+    public remove(key: string, callback?: Function) {
         if (!isString(key)) {
             this.onerror(new Error('key must be string, this current key is null'));
             return;
@@ -119,13 +124,45 @@ class WellCache {
         const saveKey = `${this.prefix}-${key}`;
         let result = null;
         switch (this.mode) {
-            case 'IDB': result = await IDB_remove.call(this, saveKey); break;
+            case 'IDB': result = IDB_remove.call(this, saveKey, callback); break;
             case 'ls': result = ls_remove.call(this, saveKey); break;
             case 'ss': result = ss_remove.call(this, saveKey); break;
         }
 
-        callback && isFunction(callback) && callback({
-            isOk: result
+        if ( this.mode != 'IDB' ) {
+            callback && isFunction(callback) && callback({
+                isOk: result
+            });
+        }
+    }
+
+    // async
+    public async saveSync(key: string, data: string | object): Promise<any> {
+        return new Promise((resolve) => {
+            this.save(key, data, (result) => {
+                resolve(result);
+            });
+        });
+    }
+    public async getSync(key: string, conditions?: object): Promise<any> {
+        return new Promise((resolve) => {
+            this.get(key, conditions, (result) => {
+                resolve(result);
+            });
+        });
+    }
+    public async hasSync(key: string, conditions?: object): Promise<any> {
+        return new Promise((resolve) => {
+            this.has(key, conditions, (result) => {
+                resolve(result);
+            });
+        });
+    }
+    public async removeSync(key: string): Promise<any> {
+        return new Promise((resolve) => {
+            this.remove(key, (result) => {
+                resolve(result);
+            });
         });
     }
 }

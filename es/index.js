@@ -53,186 +53,177 @@ var WellCache = /** @class */ (function () {
         return 'ls';
     };
     WellCache.prototype.onerror = function (err) {
-        console.log(err.name);
-        console.log(err.message);
-        console.log(err.stack);
+        console.error(err.stack);
     };
     WellCache.prototype.save = function (key, data, callback) {
-        return __awaiter(this, void 0, void 0, function () {
-            var saveKey, result, _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        if (isNoTransmission(key) || !isString(key)) {
-                            this.onerror(new Error('key must be string, this current key is null'));
-                            return [2 /*return*/];
-                        }
-                        else if (isEmptyString(key)) {
-                            this.onerror(new Error('key must be string, this current key is empty string'));
-                            return [2 /*return*/];
-                        }
-                        if (isNoTransmission(data)) {
-                            this.onerror(new Error('data must be string or object, this current data is null'));
-                            return [2 /*return*/];
-                        }
-                        else if ((isString(data) && isEmptyString(data)) || (isObject(data) && isEmptyObject(data))) {
-                            this.onerror(new Error('data must be string or object, this current data is empty'));
-                            return [2 /*return*/];
-                        }
-                        saveKey = this.prefix + "-" + key;
-                        result = null;
-                        _a = this.mode;
-                        switch (_a) {
-                            case 'IDB': return [3 /*break*/, 1];
-                            case 'ls': return [3 /*break*/, 3];
-                            case 'ss': return [3 /*break*/, 4];
-                        }
-                        return [3 /*break*/, 5];
-                    case 1: return [4 /*yield*/, IDB_save.call(this, saveKey, data)];
-                    case 2:
-                        result = _b.sent();
-                        return [3 /*break*/, 5];
-                    case 3:
-                        result = ls_save.call(this, saveKey, data);
-                        return [3 /*break*/, 5];
-                    case 4:
-                        result = ss_save.call(this, saveKey, data);
-                        return [3 /*break*/, 5];
-                    case 5:
-                        callback && isFunction(callback) && callback({
-                            name: saveKey,
-                            isOk: result
-                        });
-                        return [2 /*return*/];
-                }
+        if (isNoTransmission(key) || !isString(key)) {
+            this.onerror(new Error('key must be string, this current key is null'));
+            return;
+        }
+        else if (isEmptyString(key)) {
+            this.onerror(new Error('key must be string, this current key is empty string'));
+            return;
+        }
+        if (isNoTransmission(data)) {
+            this.onerror(new Error('data must be string or object, this current data is null'));
+            return;
+        }
+        else if ((isString(data) && isEmptyString(data)) || (isObject(data) && isEmptyObject(data))) {
+            this.onerror(new Error('data must be string or object, this current data is empty'));
+            return;
+        }
+        var saveKey = this.prefix + "-" + key;
+        var result = null;
+        switch (this.mode) {
+            case 'IDB':
+                result = IDB_save.call(this, saveKey, data, callback);
+                break;
+            case 'ls':
+                result = ls_save.call(this, saveKey, data);
+                break;
+            case 'ss':
+                result = ss_save.call(this, saveKey, data);
+                break;
+        }
+        if (this.mode != 'IDB') {
+            callback && isFunction(callback) && callback({
+                name: saveKey,
+                isOk: result
             });
-        });
+        }
     };
     WellCache.prototype.get = function (key, conditions, callback) {
-        return __awaiter(this, void 0, void 0, function () {
-            var saveKey, result, _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        if (!isString(key)) {
-                            this.onerror(new Error('key must be string, this current key is null'));
-                            return [2 /*return*/];
-                        }
-                        else if (isEmptyString(key)) {
-                            this.onerror(new Error('key must be string, this current key is empty string'));
-                            return [2 /*return*/];
-                        }
-                        if (isFunction(conditions)) {
-                            callback = conditions;
-                        }
-                        saveKey = this.prefix + "-" + key;
-                        result = null;
-                        _a = this.mode;
-                        switch (_a) {
-                            case 'IDB': return [3 /*break*/, 1];
-                            case 'ls': return [3 /*break*/, 3];
-                            case 'ss': return [3 /*break*/, 4];
-                        }
-                        return [3 /*break*/, 5];
-                    case 1: return [4 /*yield*/, IDB_get.call(this, saveKey, conditions)];
-                    case 2:
-                        result = _b.sent();
-                        return [3 /*break*/, 5];
-                    case 3:
-                        result = ls_get.call(this, saveKey, conditions);
-                        return [3 /*break*/, 5];
-                    case 4:
-                        result = ss_get.call(this, saveKey, conditions);
-                        return [3 /*break*/, 5];
-                    case 5:
-                        callback && isFunction(callback) && callback(result);
-                        return [2 /*return*/];
-                }
-            });
-        });
+        if (!isString(key)) {
+            this.onerror(new Error('key must be string, this current key is null'));
+            return;
+        }
+        else if (isEmptyString(key)) {
+            this.onerror(new Error('key must be string, this current key is empty string'));
+            return;
+        }
+        if (isFunction(conditions)) {
+            callback = conditions;
+        }
+        var saveKey = this.prefix + "-" + key;
+        var result = null;
+        switch (this.mode) {
+            case 'IDB':
+                result = IDB_get.call(this, saveKey, conditions, callback);
+                break;
+            case 'ls':
+                result = ls_get.call(this, saveKey, conditions);
+                break;
+            case 'ss':
+                result = ss_get.call(this, saveKey, conditions);
+                break;
+        }
+        if (this.mode != 'IDB') {
+            callback && isFunction(callback) && callback(result);
+        }
     };
     WellCache.prototype.has = function (key, conditions, callback) {
+        if (!isString(key)) {
+            this.onerror(new Error('key must be string, this current key is null'));
+            return;
+        }
+        else if (isEmptyString(key)) {
+            this.onerror(new Error('key must be string, this current key is empty string'));
+            return;
+        }
+        if (isFunction(conditions)) {
+            callback = conditions;
+        }
+        var saveKey = this.prefix + "-" + key;
+        var result = null;
+        switch (this.mode) {
+            case 'IDB':
+                result = IDB_has.call(this, saveKey, conditions, callback);
+                break;
+            case 'ls':
+                result = ls_has.call(this, saveKey, conditions);
+                break;
+            case 'ss':
+                result = ss_has.call(this, saveKey, conditions);
+                break;
+        }
+        if (this.mode != 'IDB') {
+            callback && isFunction(callback) && callback(result);
+        }
+    };
+    WellCache.prototype.remove = function (key, callback) {
+        if (!isString(key)) {
+            this.onerror(new Error('key must be string, this current key is null'));
+            return;
+        }
+        else if (isEmptyString(key)) {
+            this.onerror(new Error('key must be string, this current key is empty string'));
+            return;
+        }
+        var saveKey = this.prefix + "-" + key;
+        var result = null;
+        switch (this.mode) {
+            case 'IDB':
+                result = IDB_remove.call(this, saveKey, callback);
+                break;
+            case 'ls':
+                result = ls_remove.call(this, saveKey);
+                break;
+            case 'ss':
+                result = ss_remove.call(this, saveKey);
+                break;
+        }
+        if (this.mode != 'IDB') {
+            callback && isFunction(callback) && callback({
+                isOk: result
+            });
+        }
+    };
+    // async
+    WellCache.prototype.saveSync = function (key, data) {
         return __awaiter(this, void 0, void 0, function () {
-            var saveKey, result, _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        if (!isString(key)) {
-                            this.onerror(new Error('key must be string, this current key is null'));
-                            return [2 /*return*/];
-                        }
-                        else if (isEmptyString(key)) {
-                            this.onerror(new Error('key must be string, this current key is empty string'));
-                            return [2 /*return*/];
-                        }
-                        if (isFunction(conditions)) {
-                            callback = conditions;
-                        }
-                        saveKey = this.prefix + "-" + key;
-                        result = null;
-                        _a = this.mode;
-                        switch (_a) {
-                            case 'IDB': return [3 /*break*/, 1];
-                            case 'ls': return [3 /*break*/, 3];
-                            case 'ss': return [3 /*break*/, 4];
-                        }
-                        return [3 /*break*/, 5];
-                    case 1: return [4 /*yield*/, IDB_has.call(this, saveKey, conditions)];
-                    case 2:
-                        result = _b.sent();
-                        return [3 /*break*/, 5];
-                    case 3:
-                        result = ls_has.call(this, saveKey, conditions);
-                        return [3 /*break*/, 5];
-                    case 4:
-                        result = ss_has.call(this, saveKey, conditions);
-                        return [3 /*break*/, 5];
-                    case 5:
-                        callback && isFunction(callback) && callback(result);
-                        return [2 /*return*/];
-                }
+            var _this = this;
+            return __generator(this, function (_a) {
+                return [2 /*return*/, new Promise(function (resolve) {
+                        _this.save(key, data, function (result) {
+                            resolve(result);
+                        });
+                    })];
             });
         });
     };
-    WellCache.prototype.remove = function (key, callback) {
+    WellCache.prototype.getSync = function (key, conditions) {
         return __awaiter(this, void 0, void 0, function () {
-            var saveKey, result, _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        if (!isString(key)) {
-                            this.onerror(new Error('key must be string, this current key is null'));
-                            return [2 /*return*/];
-                        }
-                        else if (isEmptyString(key)) {
-                            this.onerror(new Error('key must be string, this current key is empty string'));
-                            return [2 /*return*/];
-                        }
-                        saveKey = this.prefix + "-" + key;
-                        result = null;
-                        _a = this.mode;
-                        switch (_a) {
-                            case 'IDB': return [3 /*break*/, 1];
-                            case 'ls': return [3 /*break*/, 3];
-                            case 'ss': return [3 /*break*/, 4];
-                        }
-                        return [3 /*break*/, 5];
-                    case 1: return [4 /*yield*/, IDB_remove.call(this, saveKey)];
-                    case 2:
-                        result = _b.sent();
-                        return [3 /*break*/, 5];
-                    case 3:
-                        result = ls_remove.call(this, saveKey);
-                        return [3 /*break*/, 5];
-                    case 4:
-                        result = ss_remove.call(this, saveKey);
-                        return [3 /*break*/, 5];
-                    case 5:
-                        callback && isFunction(callback) && callback({
-                            isOk: result
+            var _this = this;
+            return __generator(this, function (_a) {
+                return [2 /*return*/, new Promise(function (resolve) {
+                        _this.get(key, conditions, function (result) {
+                            resolve(result);
                         });
-                        return [2 /*return*/];
-                }
+                    })];
+            });
+        });
+    };
+    WellCache.prototype.hasSync = function (key, conditions) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                return [2 /*return*/, new Promise(function (resolve) {
+                        _this.has(key, conditions, function (result) {
+                            resolve(result);
+                        });
+                    })];
+            });
+        });
+    };
+    WellCache.prototype.removeSync = function (key) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                return [2 /*return*/, new Promise(function (resolve) {
+                        _this.remove(key, function (result) {
+                            resolve(result);
+                        });
+                    })];
             });
         });
     };

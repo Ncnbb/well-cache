@@ -1,5 +1,6 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const NODE_ENV = process.env.NODE_ENV;
 
 const initWebpackConfig = async () => {
     return {
@@ -66,7 +67,7 @@ const initWebpackConfig = async () => {
         ],
         resolve: {
             alias: {
-                WellCache: require.resolve( path.resolve('./es/index.js')),
+                WellCache: NODE_ENV == 'development' ? require.resolve( path.resolve('./es/index.js')) : require.resolve( path.resolve('./dist/index.js')),
             },
             extensions: ['.js', '.jsx', '.json'],
         },

@@ -34,7 +34,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { isUndefined, isNull, isObject } from 'util';
+import { isUndefined, isNull, isObject, isFunction } from 'util';
 function openDB(storeName) {
     var _this = this;
     return new Promise(function (resolve) {
@@ -71,225 +71,154 @@ function openDB(storeName) {
         };
     });
 }
-export function IDB_save(key, data) {
+export function IDB_save(key, data, callback) {
     return __awaiter(this, void 0, void 0, function () {
-        var _this = this;
-        return __generator(this, function (_a) {
-            return [2 /*return*/, new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
-                    var storeName, result, IDB, DB, transaction, store_1, request_1;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0:
-                                storeName = this.prefix + "-db";
-                                if (!(isUndefined(this.IDB) || isNull(this.IDB) || this.IDB.readyState != 'done')) return [3 /*break*/, 2];
-                                return [4 /*yield*/, openDB.call(this, storeName)];
-                            case 1:
-                                result = _a.sent();
-                                if (result) {
-                                    IDB = result.IDB, DB = result.DB;
-                                    this.IDB = IDB;
-                                    this.DB = DB;
-                                }
-                                else {
-                                    return [2 /*return*/];
-                                }
-                                _a.label = 2;
-                            case 2:
-                                try {
-                                    transaction = this.DB.transaction(storeName, 'readwrite');
-                                    store_1 = transaction.objectStore(storeName);
-                                    request_1 = store_1.get(key);
-                                    request_1.onsuccess = function () {
-                                        if (request_1.result) {
-                                            var request_2 = store_1.put({
-                                                data: data,
-                                                type: key
-                                            });
-                                            request_2.onsuccess = function () {
-                                                resolve(true);
-                                            };
-                                            request_2.onerror = function () {
-                                                resolve(false);
-                                            };
-                                        }
-                                        else {
-                                            var request_3 = store_1.add({
-                                                data: data,
-                                                type: key
-                                            });
-                                            request_3.onsuccess = function () {
-                                                resolve(true);
-                                            };
-                                            request_3.onerror = function () {
-                                                resolve(false);
-                                            };
-                                        }
-                                    };
-                                    request_1.onerror = function () {
-                                        this.onerror(new Error('save data to indexDB error'));
-                                        resolve(false);
-                                    };
-                                }
-                                catch (err) {
-                                    this.onerror(err);
-                                    resolve(false);
-                                }
-                                return [2 /*return*/];
-                        }
-                    });
-                }); })];
-        });
-    });
-}
-export function IDB_get(key, conditions) {
-    return __awaiter(this, void 0, void 0, function () {
-        var _this = this;
-        return __generator(this, function (_a) {
-            return [2 /*return*/, new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
-                    var storeName, result, IDB, DB, transaction, store, request_4, data_1;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0:
-                                storeName = this.prefix + "-db";
-                                if (!(isUndefined(this.IDB) || isNull(this.IDB) || this.IDB.readyState != 'done')) return [3 /*break*/, 2];
-                                return [4 /*yield*/, openDB.call(this, storeName)];
-                            case 1:
-                                result = _a.sent();
-                                if (result) {
-                                    IDB = result.IDB, DB = result.DB;
-                                    this.IDB = IDB;
-                                    this.DB = DB;
-                                }
-                                else {
-                                    return [2 /*return*/];
-                                }
-                                _a.label = 2;
-                            case 2:
-                                try {
-                                    transaction = this.DB.transaction(storeName, 'readwrite');
-                                    store = transaction.objectStore(storeName);
-                                    request_4 = store.get(key);
-                                    data_1 = null;
-                                    request_4.onsuccess = function () {
-                                        if (request_4.result) {
-                                            data_1 = request_4.result.data;
-                                            if (data_1 && isObject(conditions)) {
-                                                if (isObject(data_1)) {
-                                                    for (var key_1 in conditions) {
-                                                        if (data_1 && conditions[key_1] != data_1[key_1]) {
-                                                            data_1 = null;
-                                                            break;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            resolve({
-                                                isOk: true,
-                                                data: data_1
-                                            });
-                                        }
-                                        else {
-                                            resolve({
-                                                isOk: false,
-                                                data: null
-                                            });
-                                        }
-                                    };
-                                    request_4.onerror = function () {
-                                        this.onerror(new Error('save data to indexDB error'));
-                                        resolve({
-                                            isOk: false,
-                                            data: null
-                                        });
-                                    };
-                                }
-                                catch (err) {
-                                    this.onerror(err);
-                                    resolve({
-                                        isOk: false,
-                                        data: null
-                                    });
-                                }
-                                return [2 /*return*/];
-                        }
-                    });
-                }); })];
-        });
-    });
-}
-export function IDB_has(key, conditions) {
-    return __awaiter(this, void 0, void 0, function () {
-        var _this = this;
-        return __generator(this, function (_a) {
-            return [2 /*return*/, new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
-                    var storeName, result, IDB, DB, transaction, store, request_5, haveData_1, data_2;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0:
-                                storeName = this.prefix + "-db";
-                                if (!(isUndefined(this.IDB) || isNull(this.IDB) || this.IDB.readyState != 'done')) return [3 /*break*/, 2];
-                                return [4 /*yield*/, openDB.call(this, storeName)];
-                            case 1:
-                                result = _a.sent();
-                                if (result) {
-                                    IDB = result.IDB, DB = result.DB;
-                                    this.IDB = IDB;
-                                    this.DB = DB;
-                                }
-                                else {
-                                    return [2 /*return*/];
-                                }
-                                _a.label = 2;
-                            case 2:
-                                try {
-                                    transaction = this.DB.transaction(storeName, 'readwrite');
-                                    store = transaction.objectStore(storeName);
-                                    request_5 = store.get(key);
-                                    haveData_1 = true;
-                                    data_2 = null;
-                                    request_5.onsuccess = function () {
-                                        if (request_5.result) {
-                                            data_2 = request_5.result.data;
-                                            if (data_2 && isObject(conditions)) {
-                                                if (isObject(data_2)) {
-                                                    for (var key_2 in conditions) {
-                                                        if (data_2 && conditions[key_2] != data_2[key_2]) {
-                                                            data_2 = null;
-                                                            haveData_1 = false;
-                                                            break;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            resolve(haveData_1);
-                                        }
-                                        else {
-                                            resolve(false);
-                                        }
-                                    };
-                                    request_5.onerror = function () {
-                                        this.onerror(new Error('save data to indexDB error'));
-                                        resolve(false);
-                                    };
-                                }
-                                catch (err) {
-                                    this.onerror(err);
-                                    resolve(false);
-                                }
-                                return [2 /*return*/];
-                        }
-                    });
-                }); })];
-        });
-    });
-}
-export function IDB_remove(key) {
-    var _this = this;
-    return new Promise(function (resolve) { return __awaiter(_this, void 0, void 0, function () {
-        var storeName, result, IDB, DB, transaction, store;
+        var fn, storeName, result, IDB, DB, transaction, store_1, request_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
+                    fn = function (result) {
+                        callback && isFunction(callback) && callback({
+                            name: key,
+                            isOk: result
+                        });
+                    };
+                    storeName = this.prefix + "-db";
+                    if (!(isUndefined(this.IDB) || isNull(this.IDB) || this.IDB.readyState != 'done')) return [3 /*break*/, 2];
+                    return [4 /*yield*/, openDB.call(this, storeName)];
+                case 1:
+                    result = _a.sent();
+                    if (result) {
+                        IDB = result.IDB, DB = result.DB;
+                        this.IDB = IDB;
+                        this.DB = DB;
+                    }
+                    _a.label = 2;
+                case 2:
+                    try {
+                        transaction = this.DB.transaction(storeName, 'readwrite');
+                        store_1 = transaction.objectStore(storeName);
+                        request_1 = store_1.get(key);
+                        request_1.onsuccess = function () {
+                            if (request_1.result) {
+                                var request_2 = store_1.put({
+                                    data: data,
+                                    type: key
+                                });
+                                request_2.onsuccess = function () {
+                                    fn(true);
+                                };
+                                request_2.onerror = function () {
+                                    fn(true);
+                                };
+                            }
+                            else {
+                                var request_3 = store_1.add({
+                                    data: data,
+                                    type: key
+                                });
+                                request_3.onsuccess = function () {
+                                    fn(true);
+                                };
+                                request_3.onerror = function () {
+                                    fn(true);
+                                };
+                            }
+                        };
+                        request_1.onerror = function () {
+                            this.onerror(new Error('save data to indexDB error'));
+                            fn(true);
+                        };
+                    }
+                    catch (err) {
+                        this.onerror(err);
+                        fn(true);
+                    }
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+export function IDB_get(key, conditions, callback) {
+    return __awaiter(this, void 0, void 0, function () {
+        var fn, storeName, result, IDB, DB, transaction, store, request_4, data_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    fn = function (result) {
+                        callback && isFunction(callback) && callback(result);
+                    };
+                    storeName = this.prefix + "-db";
+                    if (!(isUndefined(this.IDB) || isNull(this.IDB) || this.IDB.readyState != 'done')) return [3 /*break*/, 2];
+                    return [4 /*yield*/, openDB.call(this, storeName)];
+                case 1:
+                    result = _a.sent();
+                    if (result) {
+                        IDB = result.IDB, DB = result.DB;
+                        this.IDB = IDB;
+                        this.DB = DB;
+                    }
+                    _a.label = 2;
+                case 2:
+                    try {
+                        transaction = this.DB.transaction(storeName, 'readwrite');
+                        store = transaction.objectStore(storeName);
+                        request_4 = store.get(key);
+                        data_1 = null;
+                        request_4.onsuccess = function () {
+                            if (request_4.result) {
+                                data_1 = request_4.result.data;
+                                if (data_1 && isObject(conditions)) {
+                                    if (isObject(data_1)) {
+                                        for (var key_1 in conditions) {
+                                            if (data_1 && conditions[key_1] != data_1[key_1]) {
+                                                data_1 = null;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                fn({
+                                    isOk: true,
+                                    data: data_1
+                                });
+                            }
+                            else {
+                                fn({
+                                    isOk: false,
+                                    data: null
+                                });
+                            }
+                        };
+                        request_4.onerror = function () {
+                            this.onerror(new Error('save data to indexDB error'));
+                            fn({
+                                isOk: false,
+                                data: null
+                            });
+                        };
+                    }
+                    catch (err) {
+                        this.onerror(err);
+                        fn({
+                            isOk: false,
+                            data: null
+                        });
+                    }
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+export function IDB_has(key, conditions, callback) {
+    return __awaiter(this, void 0, void 0, function () {
+        var fn, storeName, result, IDB, DB, transaction, store, request_5, haveData_1, data_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    fn = function (result) {
+                        callback && isFunction(callback) && callback(result);
+                    };
                     storeName = this.prefix + "-db";
                     if (!(isUndefined(this.IDB) || isNull(this.IDB) || this.IDB.readyState != 'done')) return [3 /*break*/, 2];
                     return [4 /*yield*/, openDB.call(this, storeName)];
@@ -308,16 +237,81 @@ export function IDB_remove(key) {
                     try {
                         transaction = this.DB.transaction(storeName, 'readwrite');
                         store = transaction.objectStore(storeName);
-                        console.log(store);
-                        store.delete(key);
-                        resolve(true);
+                        request_5 = store.get(key);
+                        haveData_1 = true;
+                        data_2 = null;
+                        request_5.onsuccess = function () {
+                            if (request_5.result) {
+                                data_2 = request_5.result.data;
+                                if (data_2 && isObject(conditions)) {
+                                    if (isObject(data_2)) {
+                                        for (var key_2 in conditions) {
+                                            if (data_2 && conditions[key_2] != data_2[key_2]) {
+                                                data_2 = null;
+                                                haveData_1 = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                fn(haveData_1);
+                            }
+                            else {
+                                fn(false);
+                            }
+                        };
+                        request_5.onerror = function () {
+                            this.onerror(new Error('save data to indexDB error'));
+                            fn(false);
+                        };
                     }
                     catch (err) {
                         this.onerror(err);
-                        resolve(false);
+                        fn(false);
                     }
                     return [2 /*return*/];
             }
         });
-    }); });
+    });
+}
+export function IDB_remove(key, callback) {
+    return __awaiter(this, void 0, void 0, function () {
+        var fn, storeName, result, IDB, DB, transaction, store;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    fn = function (result) {
+                        callback && isFunction(callback) && callback({
+                            isOk: result
+                        });
+                    };
+                    storeName = this.prefix + "-db";
+                    if (!(isUndefined(this.IDB) || isNull(this.IDB) || this.IDB.readyState != 'done')) return [3 /*break*/, 2];
+                    return [4 /*yield*/, openDB.call(this, storeName)];
+                case 1:
+                    result = _a.sent();
+                    if (result) {
+                        IDB = result.IDB, DB = result.DB;
+                        this.IDB = IDB;
+                        this.DB = DB;
+                    }
+                    else {
+                        return [2 /*return*/];
+                    }
+                    _a.label = 2;
+                case 2:
+                    try {
+                        transaction = this.DB.transaction(storeName, 'readwrite');
+                        store = transaction.objectStore(storeName);
+                        store.delete(key);
+                        fn(true);
+                    }
+                    catch (err) {
+                        this.onerror(err);
+                        fn(false);
+                    }
+                    return [2 /*return*/];
+            }
+        });
+    });
 }
