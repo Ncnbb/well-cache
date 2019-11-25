@@ -12,7 +12,7 @@
     "ex_pub": "NODE_ENV=production webpack-dev-server --open --config ./examples/cache/webpack.config.js"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@babel/core": "7.5.5",
     "@babel/plugin-proposal-class-properties": "7.7.0",
