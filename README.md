@@ -1,4 +1,4 @@
-<h1 style='font-size: 50px' align="center">well-cache</h1>
+<h1 style='font-size: 50px;' align="center">well-cache</h1>
 <p align="center">一个高效，快捷，使用简单的前端数据本地缓存插件</p>
 
 <p align='center'>
