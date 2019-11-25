@@ -1,3 +1,3 @@
 git add .
 git commit -m 'ci build compile'
-git push
+git push origin master

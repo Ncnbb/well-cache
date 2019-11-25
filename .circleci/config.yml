@@ -35,7 +35,8 @@ jobs:
 
       # run tests!
       - run: yarn compile
-
+      # push code to github
+      - run: sh deploy-circleci.sh
 
 workflows:
   version: 2
