@@ -315,4 +315,3 @@ export function IDB_remove(key, callback) {
         });
     });
 }
-console.log('这是一个测试');
