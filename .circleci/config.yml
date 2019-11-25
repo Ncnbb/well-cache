@@ -17,9 +17,6 @@ jobs:
     working_directory: ~/repo
 
     steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "72:50:8e:a3:e3:31:98:be:10:bd:a2:4a:0b:bc:5f:6b"
       - checkout
 
       # Download and cache dependencies
@@ -37,9 +34,8 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
+      - run: yarn build
       - run: yarn compile
-      # push code to github
-      - run: sh deploy-circleci.sh
 
 workflows:
   version: 2

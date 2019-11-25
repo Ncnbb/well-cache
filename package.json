@@ -9,7 +9,8 @@
     "watch": "rm -rf ./es && ./node_modules/.bin/tsc --watch",
     "compile": "rm -rf ./dist && gulp compile",
     "ex_dev": "NODE_ENV=development webpack-dev-server --open --config ./examples/cache/webpack.config.js",
-    "ex_pub": "NODE_ENV=production webpack-dev-server --open --config ./examples/cache/webpack.config.js"
+    "ex_pub": "NODE_ENV=production webpack-dev-server --open --config ./examples/cache/webpack.config.js",
+    "test": "mocha --require babel-register ./test/index.js"
   },
   "author": "",
   "license": "MIT",
