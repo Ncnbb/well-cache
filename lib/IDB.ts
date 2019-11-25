@@ -245,4 +245,4 @@ export async function IDB_remove(key: string, callback?: Function) {
     }
 }
 
-console.log('这是一个测试123')
+console.log('这是一个测试')
