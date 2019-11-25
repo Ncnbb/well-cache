@@ -5,6 +5,7 @@
 <img alt="npm" src="https://img.shields.io/npm/v/well-cache">
 <a href="https://www.npmjs.com/package/well-cache" target="_blank"><img alt="npm" src="https://img.shields.io/npm/dm/well-cache?label=download"></a>
 <img alt="NPM" src="https://img.shields.io/npm/l/well-cache">
+<img alt="CircleCI" src="https://img.shields.io/circleci/build/github/LLLLLamHo/well-cache/master">
 </p>
 
 # Description
