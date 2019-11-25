@@ -44,4 +44,4 @@ workflows:
       - build:
           filters:
             branches:
-              only: daily-build
+              only: master
