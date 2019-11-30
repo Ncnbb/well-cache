@@ -38,7 +38,7 @@ const wcache = new WellCache(<option>);
 save( key: string, data: string | object, callback?: Function )
 
 saveSync( key: string, data: string | object )
-- key - 数据标识
+- key - 索引字段
 - data - 存储数据
 - callback - 回调函数
 
@@ -66,7 +66,7 @@ get( key: string, conditions?: object, callback?: Function )
 
 getSync( key: string, conditions?: object)
 
-- key - 数据标识
+- key - 索引字段
 - conditions - 查询条件
 - callback - 回调函数
 
@@ -96,7 +96,7 @@ has( key: string, conditions?: object, callback?: Function )
 
 hasSync( key: string, conditions?: object)
 
-- key - 数据标识
+- key - 索引字段
 - conditions - 查询条件
 - callback - 回调函数
 
@@ -120,7 +120,7 @@ remove( key: string, callback?: Function )
 
 remove( key: string )
 
-- key - 数据标识
+- key - 索引字段
 - callback - 回调函数
 
 删除缓存数据
