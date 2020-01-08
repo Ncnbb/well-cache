@@ -1,6 +1,5 @@
 <h1 align="center">well-cache</h1>
 <p align="center">一个高效，快捷，使用简单的前端数据本地缓存插件</p>
-123
 <p align='center'>
 <img alt="npm" src="https://img.shields.io/npm/v/well-cache">
 <a href="https://www.npmjs.com/package/well-cache" target="_blank"><img alt="npm" src="https://img.shields.io/npm/dm/well-cache?label=download"></a>
