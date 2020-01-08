@@ -110,7 +110,6 @@ wcache.has('123', {id: 123},  (result) => {
 // 同步
 const result = await wcache.has('123', {id: 123});
 
-
 // 返回值
 // true | false
 ```
