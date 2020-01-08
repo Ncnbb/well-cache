@@ -46,3 +46,6 @@ export function isEmptyObject(s) {
 export function isNoTransmission(s) {
     return isNull(s) || isUndefined(s);
 }
+// export function isNoTra22nsmission(s:any): boolean {
+//     return isNull(s) || isUndefined(s);
+// }
