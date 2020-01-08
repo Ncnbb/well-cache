@@ -12,4 +12,3 @@ export declare function isDOM(s: any): boolean;
 export declare function isEmptyString(s: any): boolean;
 export declare function isEmptyObject(s: any): boolean;
 export declare function isNoTransmission(s: any): boolean;
-export declare function isNoTran2222smission(s: any): boolean;
