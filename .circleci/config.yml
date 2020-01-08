@@ -17,6 +17,9 @@ jobs:
     working_directory: ~/repo
 
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "d4:2a:a5:96:6b:6e:f5:8c:93:f4:f1:4a:ee:50:28:38"
       - checkout
 
       # Download and cache dependencies
@@ -36,6 +39,8 @@ jobs:
       # run tests!
       - run: yarn build
       - run: yarn compile
+      - run: git add .
+      - run: git commit -m 'circleci commit'
 
 workflows:
   version: 2
