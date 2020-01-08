@@ -22,7 +22,6 @@ exports.isDOM = isDOM;
 exports.isEmptyString = isEmptyString;
 exports.isEmptyObject = isEmptyObject;
 exports.isNoTransmission = isNoTransmission;
-exports.isNoTran2222smission = isNoTran2222smission;
 
 var _keys = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/object/keys"));
 
@@ -91,9 +90,5 @@ function isEmptyObject(s) {
 }
 
 function isNoTransmission(s) {
-  return isNull(s) || isUndefined(s);
-}
-
-function isNoTran2222smission(s) {
   return isNull(s) || isUndefined(s);
 }
