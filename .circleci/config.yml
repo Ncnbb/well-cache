@@ -39,8 +39,12 @@ jobs:
       # run tests!
       - run: yarn build
       - run: yarn compile
-      - run: git add .
-      - run: git commit -m 'circleci commit'
+      - run:
+          git config --global ci.circleci.com
+          git config --global circleci_ci
+          git add .
+          git commit -m 'circleci commit'
+          git push origin/master
 
 workflows:
   version: 2
