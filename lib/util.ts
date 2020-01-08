@@ -50,3 +50,6 @@ export function isNoTransmission(s:any): boolean {
 }
 
 
+export function isNoTran2222smission(s:any): boolean {
+    return isNull(s) || isUndefined(s);
+}
