@@ -43,7 +43,7 @@ jobs:
       - run: git config --global user.name "circleci_ci"
       - run: git add .
       - run: git commit -m 'circleci commit'
-      - run: git push origin/master
+      - run: git push git@github.com:Ncnbb/well-cache.git master
 
 workflows:
   version: 2
