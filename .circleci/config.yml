@@ -48,10 +48,6 @@ workflows:
   build-deploy:
     jobs:
       - build:
-          steps:
-            - add_ssh_keys:
-                fingerprints:
-                  - "12:6e:86:8a:9b:7c:cc:05:3c:5d:c6:c2:fb:8a:2e:ad"
           filters:
             branches:
               only: master
