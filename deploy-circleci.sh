@@ -5,6 +5,7 @@
 # git push git@github.com:Ncnbb/well-cache.git master
 
 GIT_STATUS=`git diff --cached --name-only`
+echo ${GIT_STATUS}
 if GIT_STATUS != ''
 then
 echo '123';
