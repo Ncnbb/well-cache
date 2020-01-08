@@ -37,13 +37,11 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
+      - run: echo '开始编译'
       - run: yarn build
       - run: yarn compile
-      - run: git config --global user.email "ci.circleci.com"
-      - run: git config --global user.name "circleci_ci"
-      - run: git add .
-      - run: git commit -m 'circleci commit'
-      - run: git push git@github.com:Ncnbb/well-cache.git master
+      - run: echo '编译结束'
+      - run: sh deploy-circleci.sh
 
 workflows:
   version: 2
