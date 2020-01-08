@@ -7,6 +7,7 @@
 <img alt="CircleCI" src="https://img.shields.io/circleci/build/github/Ncnbb/well-cache/master">
 </p>
 
+
 # Description
 
 随着前端页面越来越精细和业务的复杂度日益增加，数据量往往会以几何速度增长，当我们使用传统的localStorage和SessionStorage的时候，很容易会遇到存储容量已满的情况，这个时候我们或许可以依赖自己App给webview提供接口，使用App的特殊本地储存空间，但是解决不了在浏览器的限制，一般浏览器的localStorage和SessionStorage在4MB左右，不同浏览器的容量不一样。但是当我们要存储的数据过大或者同一个域名下多个页面都需要localStorage和SessionStorage的时候，很有可能就会出现储存空间已满的情况。所以HTML5为我们提供了[indexDB](https://developer.mozilla.org/zh-CN/docs/Web/API/IndexedDB_API)的本地存储机制，有效的为我们解决了存储空间不足的问题。
