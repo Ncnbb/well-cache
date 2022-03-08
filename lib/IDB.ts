@@ -1,4 +1,4 @@
-import { isUndefined, isNull, isObject, isFunction } from 'util';
+import { isUndefined, isNull, isObject, isFunction } from './util';
 
 function openDB(storeName: string): Promise<{IDB: IDBOpenDBRequest, DB: IDBDatabase | null}> {
     return new Promise((resolve) => {

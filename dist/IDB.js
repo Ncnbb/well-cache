@@ -19,7 +19,7 @@ var _symbol = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-sta
 
 var _promise = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/promise"));
 
-var _util = require("util");
+var _util = require("./util");
 
 var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P, generator) {
   function adopt(value) {
