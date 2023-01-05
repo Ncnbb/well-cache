@@ -28,7 +28,7 @@
     "gulp": "4.0.2",
     "gulp-babel": "8.0.0",
     "gulp-typescript": "5.0.1",
-    "handlebars-loader": "1.7.1",
+    "handlebars-loader": "1.7.3",
     "ts-lint": "4.5.1",
     "ts-loader": "6.2.1",
     "typescript": "3.7.2",
